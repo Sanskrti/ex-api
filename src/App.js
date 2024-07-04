@@ -1,25 +1,35 @@
-import logo from './logo.svg';
+import { useEffect, useState } from "react";
+import { getPosts } from './api';
 import './App.css';
+// import AutorenewIcon from '@mui/icons-material/Autorenew';
+// import styled from '@emotion/styled';
+// import { css } from '@emotion/react';
+// import { Button } from '@mui/material';
+// import HomeIcon from '@mui/icons-material/Home';
+import axios from 'axios';
 
-function App() {
+const App = () => {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    axios.get('https://jsonplaceholder.typicode.com/posts')
+      .then(response => setData(response.data))
+      .catch(error => setError(error));
+  }, []);
+
+  if (error) return <div>Error: {error.message}</div>;
+  if (!data) return <div>Loading...</div>;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Data from API</h1>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
   );
-}
+};
 
 export default App;
+
+
+ 
